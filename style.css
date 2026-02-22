@@ -1,0 +1,15 @@
+body {
+  background-color: black;
+  color: #00ff00; /* Classic Matrix/Terminal Green */
+  font-family: "Courier New", Courier, monospace;
+  padding: 20px;
+}
+
+#terminal {
+  height: 300px;
+  overflow-y: auto; /* This makes it scroll like a real terminal */
+  border: 1px solid #00ff00;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-weight: bold; /* Because you like it BOLD */
+}
