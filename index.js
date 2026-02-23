@@ -1,17 +1,15 @@
 const player = {
   name: "PLAYER",
-  hp: 100,
+  hp: 300,
   maxHp: 150,
   energy: 100,
 };
 const target = {
   name: "TARGET",
-  hp: 200,
+  hp: 100,
   maxHp: 200,
   isEncrypted: true,
 };
-
-target.hp = 400;
 
 function writeToTerminal(message) {
   let line = document.createElement("p");
@@ -30,20 +28,30 @@ function initTerminal() {
 }
 
 function runHack() {
-  if (player.energy < 20) {
-    window.alert("ERROR Insufficient energy!");
-    writeToTerminal("ERROR Insufficient energy!");
+  if (player.energy <= 20) {
+    writeToTerminal("ERROR!");
     return;
   }
-  writeToTerminal("EXPLOIT_SUCCESSFUL: 20 DAMAGE DEALT");
-
   target.hp -= 20;
-  player.energy -= 20;
-  console.log("Hack Triggered!");
+  if (target.hp <= 0) {
+    writeToTerminal("You won!");
+    return;
+  }
 
+  writeToTerminal("EXPLOIT_SUCCESSFUL: 20 DAMAGE DEALT");
   writeToTerminal(`TARGET HP REMAINING ${target.hp}`);
-  writeToTerminal(`PLAYER REMAINING ENERGY ${player.energy}`);
+  targetCounterattack();
+  if (player.hp <= 0) {
+    writeToTerminal("You Loose!");
+    return;
+  }
+  updateStatus();
+}
 
+function targetCounterattack() {
+  player.hp -= 20;
+  writeToTerminal("EXPLOIT_SUCCESSFUL: 20 DAMAGE RECIEVED");
+  writeToTerminal(`PLAYER HP REMAINING ${player.hp}`);
   updateStatus();
 }
 
@@ -72,12 +80,60 @@ document
     }
   });
 
-function heal() {
-  if (player.energy == 20) {
-    player.hp = player.hp + 10(Math.min(maxHp));
-    player.energy = player.energy - 20;
-  }
+const exploits = [
+  {
+    name: "Scar L",
+    type: "attack",
+    damage: 10,
+    energyCost: 10,
+    unlocked: true,
+  },
+  {
+    name: "M4-AR",
+    type: "bullet",
+    damage: 20,
+    energyCost: 30,
+    unlocked: false,
+  },
+  {
+    name: "F22 Raptor",
+    type: "missile",
+    damage: 50,
+    energyCost: 50,
+    unlocked: false,
+  },
+  {
+    name: "Tank",
+    type: "nuke",
+    damage: 70,
+    energyCost: 50,
+    unlocked: false,
+  },
+];
+
+function getExploitsByType(type) {
+  return exploits.filter(function (exploits) {
+    return exploits.type === type;
+  });
 }
+console.log(getExploitsByType("attack"));
+console.log(typeof getExploitsByType("attack"));
+
+const exploitsNames = exploits.map(exploitsNameFunction);
+function exploitsNameFunction(exploits) {
+  return exploits.name;
+}
+
+const expolitsUnlocked = exploits.filter(getAvailableExploits);
+function getAvailableExploits(exploits) {
+  return exploits.unlocked === true;
+}
+
+const initialValue = 0;
+const totalExploitsDamage = exploits.reduce(
+  (accumulator, exploits) => accumulator + exploits.damage,
+  initialValue,
+);
 
 initTerminal();
 updateStatus();
