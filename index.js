@@ -136,7 +136,6 @@ const totalExploitsDamage = exploits.reduce(
   initialValue,
 );
 
-
 function runExploit(name) {
   let findexpolit = exploits.find(function (exploit) {
     return exploit.name === name;
@@ -144,6 +143,10 @@ function runExploit(name) {
   if (player.energy > 20) {
     player.energy -= findexpolit.energyCost;
     target.hp -= findexpolit.damage;
+  } else {
+    writeToTerminal(
+      `This attack needs ${exploits.energyCost} energy and You have ${player.energy} energy so you cannot use this attack`,
+    );
   }
   return;
 }
