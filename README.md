@@ -28,3 +28,4 @@ Vanilla JavaScript, HTML, CSS. No frameworks, no libraries, no tutorials.
 Day 2 of active development. Enemy counterattack coming next.
 
 HOW TO ADD THIS README 
+

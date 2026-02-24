@@ -67,7 +67,6 @@ document
       let command = this.value;
       this.value = "";
       if (command.toLowerCase() == "attack") {
-        console.log(command);
         writeToTerminal(">Executing:" + command);
         runHack();
       } else if (command == "clear") {
@@ -93,10 +92,10 @@ const exploits = [
     type: "bullet",
     damage: 20,
     energyCost: 30,
-    unlocked: false,
+    unlocked: true,
   },
   {
-    name: "F22 Raptor",
+    name: "F22Raptor",
     type: "missile",
     damage: 50,
     energyCost: 50,
@@ -111,29 +110,45 @@ const exploits = [
   },
 ];
 
+// FIND ARRAY METHOD
 function getExploitsByType(type) {
   return exploits.filter(function (exploits) {
     return exploits.type === type;
   });
 }
-console.log(getExploitsByType("attack"));
-console.log(typeof getExploitsByType("attack"));
 
+// MAP ARRAY METHOD
 const exploitsNames = exploits.map(exploitsNameFunction);
 function exploitsNameFunction(exploits) {
   return exploits.name;
 }
 
+//FILTER ARRAY METHOD
 const expolitsUnlocked = exploits.filter(getAvailableExploits);
 function getAvailableExploits(exploits) {
   return exploits.unlocked === true;
 }
 
+// REDUCE ARRAY METHOD
 const initialValue = 0;
 const totalExploitsDamage = exploits.reduce(
   (accumulator, exploits) => accumulator + exploits.damage,
   initialValue,
 );
+
+
+function runExploit(name) {
+  let findexpolit = exploits.find(function (exploit) {
+    return exploit.name === name;
+  });
+  if (player.energy > 20) {
+    player.energy -= findexpolit.energyCost;
+    target.hp -= findexpolit.damage;
+  }
+  return;
+}
+
+runExploit("Tank");
 
 initTerminal();
 updateStatus();
