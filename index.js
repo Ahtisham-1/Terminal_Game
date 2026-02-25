@@ -1,12 +1,12 @@
 const player = {
   name: "PLAYER",
-  hp: 300,
-  maxHp: 150,
-  energy: 100,
+  hp: 200,
+  maxHp: 250,
+  energy: 200,
 };
 const target = {
   name: "TARGET",
-  hp: 100,
+  hp: 200,
   maxHp: 200,
   isEncrypted: true,
 };
@@ -66,7 +66,15 @@ document
     if (event.key === "Enter") {
       let command = this.value;
       this.value = "";
-      if (command.toLowerCase() == "attack") {
+
+      let foundexploit = exploits.find(
+        (exploits) => exploits.name.toLowerCase() === command.toLowerCase(),
+      );
+
+      if (foundexploit) {
+        writeToTerminal("> Executing:" + command);
+        runExploit(foundexploit.name);
+      } else if (command.toLowerCase() == "attack") {
         writeToTerminal(">Executing:" + command);
         runHack();
       } else if (command == "clear") {
@@ -81,28 +89,28 @@ document
 
 const exploits = [
   {
-    name: "Scar L",
+    name: "Scar",
     type: "attack",
     damage: 10,
     energyCost: 10,
     unlocked: true,
   },
   {
-    name: "M4-AR",
+    name: "m416",
     type: "bullet",
     damage: 20,
     energyCost: 30,
     unlocked: true,
   },
   {
-    name: "F22Raptor",
+    name: "Raptor",
     type: "missile",
     damage: 50,
     energyCost: 50,
     unlocked: false,
   },
   {
-    name: "Tank",
+    name: "tank",
     type: "nuke",
     damage: 70,
     energyCost: 50,
@@ -140,18 +148,20 @@ function runExploit(name) {
   let findexpolit = exploits.find(function (exploit) {
     return exploit.name === name;
   });
-  if (player.energy > 20) {
+  if (player.energy > findexpolit.energyCost) {
     player.energy -= findexpolit.energyCost;
     target.hp -= findexpolit.damage;
+    writeToTerminal(
+      `[You used ${findexpolit.name} attack] [${findexpolit.damage} damage was dealt] [The target has ${target.hp}hp left] `,
+    );
   } else {
     writeToTerminal(
-      `This attack needs ${exploits.energyCost} energy and You have ${player.energy} energy so you cannot use this attack`,
+      `This attack needs ${findexpolit.energyCost} energy and You have ${player.energy} energy so you cannot use this attack`,
     );
   }
+  updateStatus();
   return;
 }
-
-runExploit("Tank");
 
 initTerminal();
 updateStatus();
