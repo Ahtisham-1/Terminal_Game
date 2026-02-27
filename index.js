@@ -1,14 +1,16 @@
 const player = {
-  name: "PLAYER",
-  hp: 200,
-  maxHp: 250,
-  energy: 200,
+  name: "FROGMAN",
+  hp: 100,
+  energy: 100,
+  level: 1,
+  credits: 0,
 };
 const target = {
-  name: "TARGET",
+  name: "PENTAGON_SERVER",
   hp: 200,
   maxHp: 200,
-  isEncrypted: true,
+  firewall: 50,
+  isEncrypted: false,
 };
 
 function writeToTerminal(message) {
@@ -96,24 +98,24 @@ const exploits = [
     unlocked: true,
   },
   {
-    name: "m416",
+    name: "M416",
     type: "bullet",
     damage: 20,
     energyCost: 30,
     unlocked: true,
   },
   {
-    name: "Raptor",
+    name: "F22",
     type: "missile",
     damage: 50,
     energyCost: 50,
     unlocked: false,
   },
   {
-    name: "tank",
+    name: "Atom-Bomb",
     type: "nuke",
-    damage: 70,
-    energyCost: 50,
+    damage: 200,
+    energyCost: 180,
     unlocked: false,
   },
 ];
@@ -148,6 +150,7 @@ function runExploit(name) {
   let findexpolit = exploits.find(function (exploit) {
     return exploit.name === name;
   });
+
   if (player.energy > findexpolit.energyCost) {
     player.energy -= findexpolit.energyCost;
     target.hp -= findexpolit.damage;
@@ -159,9 +162,28 @@ function runExploit(name) {
       `This attack needs ${findexpolit.energyCost} energy and You have ${player.energy} energy so you cannot use this attack`,
     );
   }
+
+  if (target.hp <= 0) {
+    writeToTerminal("You Win!");
+    return;
+  }
+  targetCounterattack();
+  if (player.hp <= 0) {
+    writeToTerminal("You Loose");
+  }
+
   updateStatus();
   return;
 }
 
+exploitsNames.forEach(renderExploitButtons);
+function renderExploitButtons(exploitsNames) {
+  let button = document.createElement("button");
+  button.textContent = exploitsNames;
+  button.addEventListener("click", function () {
+    runExploit(exploitsNames);
+  });
+  document.getElementById("exploitButtons").appendChild(button);
+}
 initTerminal();
 updateStatus();

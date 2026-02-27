@@ -1,8 +1,10 @@
 body {
   background-color: black;
   color: #00ff00; /* Classic Matrix/Terminal Green */
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Consolas";
   padding: 20px;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 #terminal {
@@ -12,4 +14,5 @@ body {
   padding: 10px;
   margin-bottom: 10px;
   font-weight: bold; /* Because you like it BOLD */
+  font-family: "consolas";
 }
