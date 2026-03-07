@@ -1,7 +1,7 @@
 const player = {
   name: "FROGMAN",
-  hp: 100,
-  energy: 100,
+  hp: 200,
+  energy: 200,
   level: 1,
   credits: 0,
 };
@@ -34,13 +34,12 @@ function runHack() {
     writeToTerminal("ERROR!");
     return;
   }
-  target.hp -= 20;
+  target.hp -= 10;
   if (target.hp <= 0) {
     writeToTerminal("You won!");
     return;
   }
-
-  writeToTerminal("EXPLOIT_SUCCESSFUL: 20 DAMAGE DEALT");
+  writeToTerminal(`EXPLOIT_SUCCESSFUL: 10 DAMAGE DEALT`);
   writeToTerminal(`TARGET HP REMAINING ${target.hp}`);
   targetCounterattack();
   if (player.hp <= 0) {
@@ -51,15 +50,16 @@ function runHack() {
 }
 
 function targetCounterattack() {
-  player.hp -= 20;
-  writeToTerminal("EXPLOIT_SUCCESSFUL: 20 DAMAGE RECIEVED");
+  let targetAttack = Math.floor(Math.random() * 70);
+  player.hp -= targetAttack;
+  writeToTerminal(`EXPLOIT_SUCCESSFUL: ${targetAttack} DAMAGE RECIEVED`);
   writeToTerminal(`PLAYER HP REMAINING ${player.hp}`);
   updateStatus();
 }
 
 function updateStatus() {
   const statusElement = (document.getElementById("statusBar").textContent =
-    `[PLAYER:${player.name}/${player.hp}-HP/${player.energy}-Energy] --- [TARGET:${target.name}/${target.hp}-HP]`);
+    `[PLAYER:${player.name}/${player.hp}-HP/${player.energy}-Energy] Level:${player.level} credits${player.credits} --- [TARGET:${target.name}/${target.hp}-HP]`);
 }
 
 document
@@ -96,6 +96,13 @@ const exploits = [
     damage: 10,
     energyCost: 10,
     unlocked: true,
+  },
+  {
+    name: "bankai",
+    type: "sword",
+    damage: 100,
+    energyCost: 10,
+    unlocked: false,
   },
   {
     name: "M416",
@@ -154,6 +161,7 @@ function runExploit(name) {
   if (player.energy > findexpolit.energyCost) {
     player.energy -= findexpolit.energyCost;
     target.hp -= findexpolit.damage;
+    player.credits += 5;
     writeToTerminal(
       `[You used ${findexpolit.name} attack] [${findexpolit.damage} damage was dealt] [The target has ${target.hp}hp left] `,
     );
@@ -164,26 +172,55 @@ function runExploit(name) {
   }
 
   if (target.hp <= 0) {
-    writeToTerminal("You Win!");
+    writeToTerminal("YOU WIN  --- ACCESS GRANTED");
+    updateStatus();
+    document.getElementById("exploitButtons").textContent = null;
+
     return;
   }
   targetCounterattack();
   if (player.hp <= 0) {
-    writeToTerminal("You Loose");
+    writeToTerminal("YOU LOOSE  --- CONNECTION TERMINATED");
+    document.getElementById("exploitButtons").textContent = null;
   }
 
+  checkLevelUp();
   updateStatus();
+
   return;
 }
 
-exploitsNames.forEach(renderExploitButtons);
-function renderExploitButtons(exploitsNames) {
+let newUnlockedNames = expolitsUnlocked.map((exploits) => {
+  return exploits.name;
+});
+newUnlockedNames.forEach(renderExploitButtons);
+function renderExploitButtons(name) {
   let button = document.createElement("button");
-  button.textContent = exploitsNames;
+  button.textContent = name;
   button.addEventListener("click", function () {
-    runExploit(exploitsNames);
+    runExploit(name);
   });
   document.getElementById("exploitButtons").appendChild(button);
 }
+
+function checkLevelUp() {
+  if (player.credits >= 20) {
+    player.level++;
+    if (player.level === 2) {
+      let findExploit = exploits.find(function (exploit) {
+        return exploit.unlocked === false;
+      });
+      findExploit.unlocked = true;
+    }
+  }
+  document.getElementById("exploitButtons").textContent = null;
+  let NewUnlockedExploits = exploits.filter(getAvailableExploits);
+  let newNames = NewUnlockedExploits.map((exploits) => {
+    return exploits.name;
+  });
+  newNames.forEach(renderExploitButtons);
+}
+
+renderExploitButtons();
 initTerminal();
 updateStatus();
