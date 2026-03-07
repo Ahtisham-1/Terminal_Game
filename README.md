@@ -1,41 +1,14 @@
-# Terminal Game
+# Hacker Game 🖥️
 
-A command-driven game that runs in the browser. Type exploits into a 
-terminal, attack a target, drain their HP, manage your energy.
+A browser-based hacking simulation built in 5 days with vanilla JavaScript.
 
-## Stack
+You are FROGMAN. Your target: PENTAGON_SERVER. Pick exploits, drain HP, 
+survive counterattacks, level up, unlock new weapons. 
+Win with ACCESS GRANTED. Lose with CONNECTION TERMINATED.
 
-Vanilla JavaScript, HTML, CSS. No frameworks, no libraries, no tutorials.
-
-## Commands
-
-- `attack` — launch an exploit against the target
-- `start` — start a new game
-- `clear` — clear the terminal
-
-## Status
-
-Day 1 and 2 development. Player arsenal attack coming next .
-
-## What's Built So Far
-
-- Player and target objects storing all game state
-- Real-time terminal output on every action
-- Energy system — attacks cost energy
-- Live status updates showing HP and energy after each action
-- Command-based input handling
-- Made an array of objects
-- Learned how to use Map(),Filter(),Reduce(),Find()
-
-## Status
-
-Day 3 development. Enemy counterattack coming next.
-
-- Player and target objects storing all game state
-- Real-time terminal output on every action
-- Energy system — attacks cost energy
-- Live status updates showing HP and energy after each action
-- Command-based input handling
-- Exploits arsenal — array of objects with name, damage, energyCost, type, unlocked
-- map, filter, reduce functions on the arsenal
-- runExploit function — finds exploit by name, checks energy, deals damage to target
+## What I learned
+- Day 1 — Objects and dot notation
+- Day 2 — Arrays, filter, map, reduce, find
+- Day 3 — Functions, game logic, Math.random()
+- Day 4 — DOM manipulation, event listeners
+- Day 5 — Win/lose conditions, chaining functions, game state
